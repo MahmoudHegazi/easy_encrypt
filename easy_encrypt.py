@@ -2,8 +2,8 @@ import random
 data = "task_id=1,guest_id=3,code=AH72B"
 
 encryptList = []
-salt = 55544487845
-lenstr = 10
+salt = random.randint(10000000, 99999999)
+lenstr = len(data)
 
 def encrypt():
     random_range = data[1:len(data) - 3]
@@ -23,10 +23,12 @@ def encrypt():
 print(encrypt())
 
 
-def decrypt(req_parameter):
+def decrypt(req_parameter, salt):
     if "+" not in req_parameter:
         return False
-    fake_random = int(req_parameter.split("+")[1])
+    full_data = req_parameter.split("+")
+    fake_random = int(full_data[1])
+    lenstr = len(str(full_data[0]))
     formala_num = int((lenstr * salt) / 2)
     the_real_random = int(fake_random - formala_num)
     string_list = list(req_parameter.split("+")[0])
@@ -36,4 +38,4 @@ def decrypt(req_parameter):
     splited_random_list = string1.split(str(dumy_value))
     return splited_random_list[0][::-1] + splited_random_list[1][::-1]
 
-print(decrypt(encrypt()))
+print(decrypt(encrypt(), salt))
