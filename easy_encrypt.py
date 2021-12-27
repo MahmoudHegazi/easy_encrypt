@@ -1,5 +1,5 @@
 import random
-data = "task_id=1,guest_id=3,code=AH72B"
+data = "task_id=1,guest_id=3,code=dbns1B"
 
 encryptList = []
 salt = random.randint(10000000, 99999999)
@@ -20,22 +20,23 @@ def encrypt():
     part2 = splited_random_list[0]
     encrypted = splited_random_list[0][::-1] + splited_random_list[1][::-1] + "+" + str(fake_random)
     return encrypted
-print(encrypt())
+print("encrypted Value: " + encrypt())
 
 
 def decrypt(req_parameter, salt):
-    if "+" not in req_parameter:
-        return False
-    full_data = req_parameter.split("+")
-    fake_random = int(full_data[1])
-    lenstr = len(str(full_data[0]))
-    formala_num = int((lenstr * salt) / 2)
-    the_real_random = int(fake_random - formala_num)
-    string_list = list(req_parameter.split("+")[0])
-    dumy_value = random.randint(2, 1546458)
-    string_list.insert(the_real_random, str(dumy_value))
-    string1 = "".join(string_list)
-    splited_random_list = string1.split(str(dumy_value))
-    return splited_random_list[0][::-1] + splited_random_list[1][::-1]
+    try:
+        full_data = req_parameter.split("+")
+        fake_random = int(full_data[1])
+        lenstr = len(str(full_data[0]))
+        formala_num = int((lenstr * salt) / 2)
+        the_real_random = int(fake_random - formala_num)
+        string_list = list(req_parameter.split("+")[0])
+        dumy_value = random.randint(2, 1546458)
+        string_list.insert(the_real_random, str(dumy_value))
+        string1 = "".join(string_list)
+        splited_random_list = string1.split(str(dumy_value))
+        return splited_random_list[0][::-1] + splited_random_list[1][::-1]
+    except:
+        return None
 
 print(decrypt(encrypt(), salt))
